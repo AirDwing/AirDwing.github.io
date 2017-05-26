@@ -3,18 +3,18 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: AirDwing
 subtitle:
 description:
-author: John Doe
-language:
-timezone:
+author: AirDwing Team
+language: zh-Hans
+timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: http://yoursite.com
+url: http://airdwing.github.io
 root: /
-permalink: :year/:month/:day/:title/
+permalink: posts/:year/:title/
 permalink_defaults:
 
 # Directory
@@ -28,7 +28,7 @@ i18n_dir: :lang
 skip_render:
 
 # Writing
-new_post_name: :title.md # File name of new posts
+new_post_name: :year-:month-:day-:title.md
 default_layout: post
 titlecase: false # Transform title into titlecase
 external_link: true # Open external links in new tab
@@ -68,4 +68,6 @@ theme: landscape
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
-  type:
+- type: git
+  repo: git@github.com:AirDwing/AirDwing.github.io.git
+  branch: master
