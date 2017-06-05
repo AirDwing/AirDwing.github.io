@@ -23,7 +23,7 @@ tags: [node.js, azure]
 }
 ```
 
-不能以`cli`工具执行,像这样的是无法执行的
+不能以`cli`工具执行,像这样的是无法执行的:
 
 ```js
 "scripts": {
@@ -63,3 +63,13 @@ app.listen(process.env.PORT || 3000);
 
 ![](https://cloud.githubusercontent.com/assets/1890238/26770714/ac0ede34-49eb-11e7-8850-9c9740dc48d2.png)
 
+## 指定node/npm版本
+
+`package.json`中添加:
+
+```js
+"engines": {
+  "node": ">= 8.0.0",
+  "npm": ">= 5.0.0"
+}
+```
