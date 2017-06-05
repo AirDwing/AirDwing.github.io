@@ -70,5 +70,5 @@ theme: next
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
 - type: git
-  repo: https://${GH_TOKEN}@${GH_REF}
+  repo: git@github.com:AirDwing/AirDwing.github.io.git
   branch: master
