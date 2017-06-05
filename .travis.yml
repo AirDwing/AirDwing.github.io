@@ -2,6 +2,5 @@ language: node_js
 node_js: 7
 install: 
   - npm install .
-  - cd themes/next
-  - git pull
+  - cd themes/next && git pull
 script: npm start
