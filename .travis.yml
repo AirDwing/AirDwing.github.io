@@ -2,5 +2,5 @@ language: node_js
 node_js: 7
 install: 
   - npm install .
-  - cd themes/next && git pull
+  - git submodule update --init --recursive
 script: npm start
