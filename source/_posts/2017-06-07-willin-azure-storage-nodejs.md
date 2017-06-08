@@ -86,3 +86,26 @@ const stream = fs.createReadStream(path.join(__dirname, '/testfile'));
   console.log(result);
 })();
 ```
+
+在 AirX 项目中的实际使用:
+
+<https://github.com/AirDwing/node-airx-sdk>
+
+```js
+const SDK = require('@airx/sdk');
+const fs = require('fs');
+
+const sdk = new SDK({
+  SecretId: 'xxxx',
+  SecretKey: 'xxxx'
+});
+
+(async () => {
+  const result = await sdk.upload({
+    auth: 'xxxx',
+    type: 'orgverify',
+    file: fs.createReadStream('PATH/TO/xxx.jpg') // 注意这里, 本地文件可以用 path.join 拼装地址,或者直接用Stream
+  });
+  console.log(result);
+})();
+```
