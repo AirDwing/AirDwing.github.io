@@ -19,6 +19,8 @@ IOT Hub应用实际开发过程中的一些注意细节
 
 ### 1. 注册设备
 
+<!--more-->
+
 ```js
 const iothub = require('azure-iothub');
 
