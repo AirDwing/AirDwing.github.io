@@ -15,7 +15,7 @@ IOT Hub应用实际开发过程中的一些注意细节
 - IoT Hub(基于Event Hubs)消息管理: <https://www.npmjs.com/package/azure-event-hubs>
 - 开发调试工具: <https://www.npmjs.com/package/iothub-explorer>
 
-## 简单发送示例
+## 简单发送接收示例
 
 ### 1. 注册设备
 
@@ -99,7 +99,9 @@ const printError = function (err) {
 const printMessage = function (message) {
   console.log('Message received: ');
   console.log(JSON.stringify(message.body));
-  console.log(message);
+  Object.getOwnPropertyNames(message).forEach((x) => {
+    console.log(x, message[x]);
+  });
   console.log('');
 };
 
@@ -113,6 +115,45 @@ client.open()
       receiver.on('message', printMessage);
     })))
     .catch(printError);
+```
+
+注意:
+
+- 客户端传的`properties`,在消息体中是`message.applicationProperties`
+- `message`包含的属性如下:
+
+```js
+[ 'partitionKey',
+  'body',
+  'enqueuedTimeUtc',
+  'offset',
+  'properties',
+  'applicationProperties',
+  'sequenceNumber',
+  'annotations',
+  'systemProperties' ]
+```
+
+消息体示例:
+
+```bash
+Message received:
+partitionKey undefined
+body { deviceId: 'myFirstNodeDevice', windSpeed: 10.51685587945142 }
+enqueuedTimeUtc 2017-06-13T01:21:02.519Z
+offset 73240
+properties undefined
+applicationProperties { asdf: 'asdfz' }
+sequenceNumber 182
+annotations { 'x-opt-sequence-number': 182,
+  'x-opt-offset': '73240',
+  'x-opt-enqueued-time': 2017-06-13T01:21:02.519Z,
+  'iothub-connection-device-id': 'myFirstNodeDevice',
+  'iothub-connection-auth-method': '{ "scope": "device", "type": "sas", "issuer": "iothub" }',
+  'iothub-connection-auth-generation-id': 'xxxxxxx',
+  'iothub-enqueuedtime': 2017-06-13T01:21:02.786Z,
+  'iothub-message-source': 'Telemetry' }
+systemProperties undefined
 ```
 
 ## 配置路由(需要Event Hubs)
