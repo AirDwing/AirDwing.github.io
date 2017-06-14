@@ -119,10 +119,6 @@ font:
     external: true
     family: 'Lobster Two'
 
-reward_comment: Donate / Support
-wechatpay: //go.sh.gg/images/wx.png
-alipay: //go.sh.gg/images/alipay.png
-
 leancloud_visitors:
   enable: true
   app_id: vq3G2lVgdi7EORNk3ySgUbP9-gzGzoHsz
