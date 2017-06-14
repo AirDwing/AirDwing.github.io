@@ -43,6 +43,79 @@ for (let i = 1; i <= numCPUs; i += 1) {
 }
 ```
 
+## Cluster 模式示例
+
+入口文件 `index.js`
+
+```js
+const cluster = require('cluster');
+(async () => {
+  /* eslint global-require:0 */
+  let run;
+  if (cluster.isMaster) {
+    run = require('./cluster/master');
+  } else {
+    run = require('./cluster/worker');
+  }
+  try {
+    await run();
+  } catch (err) {
+    console.trace(err);
+  }
+})();
+```
+
+Master任务: `./cluster/master.js`
+
+```js
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
+
+// 处理的任务列表
+const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 0];
+
+module.exports = async () => {
+  // 调度处理代码写在这儿
+  // 每个 CPU 分配 N 个任务
+  const n = Math.floor(arr.length / numCPUs);
+  // 未分配的余数
+  const remainder = arr.length % numCPUs;
+
+  for (let i = 1; i <= numCPUs; i += 1) {
+    const tasks = arr.splice(0, n + (i > remainder ? 0 : 1));
+    // 将任务编号传递到 Cluster 内启动
+    cluster.fork({ tasks: JSON.stringify(tasks) });
+  }
+  cluster.on('exit', (worker) => {
+    console.log(`worker #${worker.id} PID:${worker.process.pid} died`);
+  });
+};
+```
+
+Cluster任务: `./cluster/worker.js`
+
+```js
+const cluster = require('cluster');
+// 禁止直接启动
+if (cluster.isMaster) {
+  process.exit(0);
+}
+
+module.exports = async () => {
+  const env = process.env.tasks;
+  let tasks = [];
+  if (/^\[.*\]$/.test(env)) {
+    tasks = JSON.parse(env);
+  }
+  if (tasks.length === 0) {
+    // 非法启动, 释放进程资源
+    process.exit(0);
+  }
+  console.log(`worker #${cluster.worker.id} PID:${process.pid} Start`);
+  console.log(tasks);
+};
+```
+
 ## 多服务器多核心分配调度
 
 假设处理的任务列表如下:
@@ -81,7 +154,7 @@ const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
   - CPU8: [ 15, 16 ]
 
 ```js
-const numCPUs = require('os').cpus().length; // 假设该值为 4
+const numCPUs = require('os').cpus().length;
 
 // 处理的任务列表
 const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32];
@@ -90,3 +163,4 @@ const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 
 ```
 
 未完待续
+
