@@ -120,6 +120,6 @@ font:
     family: 'Lobster Two'
 
 leancloud_visitors:
-  enable: true
+  enable: false
   app_id: vq3G2lVgdi7EORNk3ySgUbP9-gzGzoHsz
   app_key: DC7SB8hJ1LMXboBRMh12UOim
