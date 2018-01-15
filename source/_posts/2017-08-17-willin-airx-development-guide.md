@@ -239,7 +239,7 @@ console.log(signStr);
 
 
 ```js
-{
+ {
   UNKOWN_ERROR: 1000, // 未知错误
   INVALID_PARAMS: 1001, // 参数不合法
   DB_ERROR: 1100, // 数据库错误
@@ -252,6 +252,9 @@ console.log(signStr);
   EMAIL_EXISTED: 2004, // 邮箱已经被注册
   MOBILE_EXISTED: 2005, // 手机号已经被注册
   ORG_EXISTED: 2006, // 组织名称已存在
+  INVALID_EMAIL_CODE: 2007, // 邮箱验证码错误
+  LIMITATION_EMAIL_CODE: 2008, // 邮箱验证码发送限制
+  EMAIL_BINDED: 2009, // 用户已经有了绑定的邮箱
 
   INVALID_PASSWORD: 2100, // 密码强度不符合要求
   INVALID_ENCRYPTION: 2101, // 加密错误
@@ -272,11 +275,15 @@ console.log(signStr);
   USER_PRIVILEGE_NOT_SUFFICIENT: 2309, // 用户权限不足
   ORG_FORBIDDEN: 2310, // 无权操作该组织
   PARENT_ORG_FORBIDDEN: 2311, // 无权操作上级组织
-
+  USER_EMAIL_EXITED: 2312, // 用户邮箱尚未注册
+  INVALID_FILE_EXT: 2400, // 文件格式不合法
+  INVALID_FILE_TYPE: 2401, // 文件类型不合法
+  LOG_INFO_MISS: 2402, // 日志信息参数缺失
   DEVICE_ALREADY_REGISTERRED: 2500, // 该设备已经注册
   DEVICE_NOT_EXIST: 2501, // 设备未注册
   DEVICE_ENABLE_IOTHUB_FAILURE: 2502, // 设备iothub启用失败
   DEVICE_DISABLE_IOTHUB_FAILURE: 2503, // 设备iothub禁用失败
+  NO_PARAMS_EDIT: 2504, // 修改设备信息输入参数不可用
   TAPE_CREATE_FAILURE: 2601, // 创建录制任务失败
   PLAN_NOT_ENDED: 2602, // 已经申请的任务没有终止
   PLAN_ALREADY_ENDED: 2603, // 已经申请的任务已经终止
@@ -284,8 +291,7 @@ console.log(signStr);
   DID_AND_STARTTIME_USED: 2605, // 数据库中用户id和起飞时间已占用
   ORG_DATA_ERROR: 2606, // 数据库中oid上级递进查询出现问题，例子：出现子组织a的父组织b的父组织，又是a
   ENDTIME_EARLIER_THAN_STARTTIME: 2607, // 传递参数中，结束时间比开始时间要早，错误
-  INVALID_FILE_EXT: 2400, // 文件格式不合法
-  INVALID_FILE_TYPE: 2401, // 文件类型不合法
+  TIME_SHOULD_IN_HOUR: 2608, // 只能查一个小时之内的直播数据
   USER_NOT_OWN_APP_KEY: 2700, // 用户无权处理此app版本
   WRONG_INPUT_PARAMS: 2701, // 用户输入参数有误
   ALREADY_VERIFIED_CAN_NOT_EDITED: 2702, // 已经验证完毕，不能再次编辑
@@ -294,6 +300,8 @@ console.log(signStr);
   CAN_NOT_FIND_APP_VERSION: 2705, // appkey对应的app找不到可用版本
   DATA_ORGANIZATION_WRONG: 2706, // 组织用户数据错误
   // 签名相关
+  CAN_NOT_FIND_BIND_INFO: 2800, // 找不到目标绑定信息
+  BIND_INFO_PARSE_ERROR: 2801, // 绑定信息对象解析错误
   AUTHORIZE_FAILED: 4100, // 鉴权失败
   INVALID_APPKEY: 4104, // 不存在的SecretId
   REPLAY_ATTACKS: 4500 // 重放攻击
