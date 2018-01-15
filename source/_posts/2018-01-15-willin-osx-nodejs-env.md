@@ -9,6 +9,7 @@ tags: [node.js, fe, be, dev]
 
 - Brew： 用于安装各类 *nix 依赖包和应用
 - dnsmasq： Localhost下的泛域名指定（Brew 安装）
+- LaunchRocket： Brew 应用 GUI 管理工具（Brew Cask 安装）
 - iTerm + Oh My Zsh!： 高效 Shell 工具
 - iStat Menus：系统监控
 - CheatSheet： 按住 `⌘ command` 不放弹出快捷键菜单
