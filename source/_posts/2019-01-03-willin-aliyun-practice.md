@@ -1,6 +1,6 @@
 ---
 title: "Willin: 大翼航空：云上自动化测试与持续集成实践"
-date: 2018-01-03 14:38:30
+date: 2019-01-03 14:38:30
 categories: Dev
 tags: [node.js, fe, be, dev]
 ---
