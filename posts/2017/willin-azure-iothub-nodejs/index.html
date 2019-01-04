@@ -1,0 +1,826 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="node.js,azure,iothub,eventhubs,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AirDwing" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="IOT Hub应用实际开发过程中的一些注意细节  资源:  创建设备: https://www.npmjs.com/package/azure-iothub IoT Hub(基于Event Hubs)消息管理: https://www.npmjs.com/package/azure-event-hubs 开发调试工具: https://www.npmjs.com/package/iothub-ex">
+<meta name="keywords" content="node.js,azure,iothub,eventhubs">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Willin: Azure Node.js IoT Hub开发指南">
+<meta property="og:url" content="http://blog.airdwing.com/posts/2017/willin-azure-iothub-nodejs/index.html">
+<meta property="og:site_name" content="AirDwing">
+<meta property="og:description" content="IOT Hub应用实际开发过程中的一些注意细节  资源:  创建设备: https://www.npmjs.com/package/azure-iothub IoT Hub(基于Event Hubs)消息管理: https://www.npmjs.com/package/azure-event-hubs 开发调试工具: https://www.npmjs.com/package/iothub-ex">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1890238/27019465-566b06d4-4efe-11e7-8a74-240c0c523ac4.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1890238/27019487-89f17e8e-4efe-11e7-815c-c3d62a3213ef.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1890238/27019555-23edcb5a-4eff-11e7-89e6-57f88d241612.png">
+<meta property="og:image" content="https://user-images.githubusercontent.com/1890238/27019570-5238cd52-4eff-11e7-932f-78a8a97d0246.png">
+<meta property="og:updated_time" content="2019-01-04T04:49:33.394Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Willin: Azure Node.js IoT Hub开发指南">
+<meta name="twitter:description" content="IOT Hub应用实际开发过程中的一些注意细节  资源:  创建设备: https://www.npmjs.com/package/azure-iothub IoT Hub(基于Event Hubs)消息管理: https://www.npmjs.com/package/azure-event-hubs 开发调试工具: https://www.npmjs.com/package/iothub-ex">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/1890238/27019465-566b06d4-4efe-11e7-8a74-240c0c523ac4.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.airdwing.com/posts/2017/willin-azure-iothub-nodejs/">
+
+
+
+
+
+  <title>Willin: Azure Node.js IoT Hub开发指南 | AirDwing</title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AirDwing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://blog.airdwing.com/posts/2017/willin-azure-iothub-nodejs/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AirDwing Team">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AirDwing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Willin: Azure Node.js IoT Hub开发指南</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-12T04:45:36+00:00">
+                2017-06-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Dev/" itemprop="url" rel="index">
+                    <span itemprop="name">Dev</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote class="blockquote-center"><p>IOT Hub应用实际开发过程中的一些注意细节</p>
+</blockquote>
+<p>资源:</p>
+<ul>
+<li>创建设备: <a href="https://www.npmjs.com/package/azure-iothub" target="_blank" rel="noopener">https://www.npmjs.com/package/azure-iothub</a></li>
+<li>IoT Hub(基于Event Hubs)消息管理: <a href="https://www.npmjs.com/package/azure-event-hubs" target="_blank" rel="noopener">https://www.npmjs.com/package/azure-event-hubs</a></li>
+<li>开发调试工具: <a href="https://www.npmjs.com/package/iothub-explorer" target="_blank" rel="noopener">https://www.npmjs.com/package/iothub-explorer</a></li>
+</ul>
+<h2 id="简单发送接收示例"><a href="#简单发送接收示例" class="headerlink" title="简单发送接收示例"></a>简单发送接收示例</h2><h3 id="1-注册设备"><a href="#1-注册设备" class="headerlink" title="1. 注册设备"></a>1. 注册设备</h3><a id="more"></a>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> iothub = <span class="built_in">require</span>(<span class="string">'azure-iothub'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> registry = iothub.Registry.fromConnectionString(<span class="string">'[connectionString]'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> device = <span class="keyword">new</span> iothub.Device(<span class="literal">null</span>);</span><br><span class="line">device.deviceId = <span class="string">'[deviceId]'</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">printDeviceInfo</span>(<span class="params">err, deviceInfo, res</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (deviceInfo) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(deviceInfo, <span class="literal">null</span>, <span class="number">2</span>));</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Device id: <span class="subst">$&#123;deviceInfo.deviceId&#125;</span>`</span>);</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Device key: <span class="subst">$&#123;deviceInfo.authentication.symmetricKey.primaryKey&#125;</span>`</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 删除设备 registry.delete(deviceId, (err, deviceInfo, res) =&gt; &#123;&#125;);</span></span><br><span class="line">registry.create(device, (err, deviceInfo, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    registry.get(device.deviceId, printDeviceInfo);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">if</span> (deviceInfo) &#123;</span><br><span class="line">    printDeviceInfo(err, deviceInfo, res);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<h3 id="2-模拟设备发送消息"><a href="#2-模拟设备发送消息" class="headerlink" title="2. 模拟设备发送消息"></a>2. 模拟设备发送消息</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> clientFromConnectionString = <span class="built_in">require</span>(<span class="string">'azure-iot-device-mqtt'</span>).clientFromConnectionString;</span><br><span class="line"><span class="keyword">const</span> Message = <span class="built_in">require</span>(<span class="string">'azure-iot-device'</span>).Message;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> connectionString = <span class="string">'HostName=[修改连接主机];DeviceId=[deviceID];SharedAccessKey=[连接密钥]'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> client = clientFromConnectionString(connectionString);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">printResultFor</span>(<span class="params">op</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">printResult</span>(<span class="params">err, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;op&#125;</span> error: <span class="subst">$&#123;err.toString()&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">if</span> (res) <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;op&#125;</span> status: <span class="subst">$&#123;res.constructor.name&#125;</span>`</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> connectCallback = <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Could not connect: <span class="subst">$&#123;err&#125;</span>`</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Client connected'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create a message and send it to the IoT Hub every second</span></span><br><span class="line">    setInterval(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> windSpeed = <span class="number">10</span> + (<span class="built_in">Math</span>.random() * <span class="number">4</span>);</span><br><span class="line">      <span class="keyword">const</span> data = <span class="built_in">JSON</span>.stringify(&#123; <span class="attr">deviceId</span>: <span class="string">'myFirstNodeDevice'</span>, windSpeed &#125;);</span><br><span class="line">      <span class="keyword">const</span> message = <span class="keyword">new</span> Message(data);</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">`Sending message: <span class="subst">$&#123;message.getData()&#125;</span>`</span>);</span><br><span class="line">      client.sendEvent(message, printResultFor(<span class="string">'send'</span>));</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">client.open(connectCallback);</span><br></pre></td></tr></table></figure>
+<h3 id="3-服务器端接收消息"><a href="#3-服务器端接收消息" class="headerlink" title="3. 服务器端接收消息"></a>3. 服务器端接收消息</h3><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> EventHubClient = <span class="built_in">require</span>(<span class="string">'azure-event-hubs'</span>).Client;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> connectionString = <span class="string">'HostName=[修改连接主机];SharedAccessKeyName=iothubowner;SharedAccessKey=[修改连接密钥]'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> printError = <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err.message);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> printMessage = <span class="function"><span class="keyword">function</span> (<span class="params">message</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Message received: '</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(message.body));</span><br><span class="line">  <span class="built_in">Object</span>.getOwnPropertyNames(message).forEach(<span class="function">(<span class="params">x</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(x, message[x]);</span><br><span class="line">  &#125;);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">''</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> client = EventHubClient.fromConnectionString(connectionString);</span><br><span class="line"></span><br><span class="line">client.open()</span><br><span class="line">    .then(client.getPartitionIds.bind(client))</span><br><span class="line">    .then(<span class="function"><span class="params">partitionIds</span> =&gt;</span> partitionIds.map(<span class="function"><span class="params">partitionId</span> =&gt;</span> client.createReceiver(<span class="string">'$Default'</span>, partitionId, &#123; <span class="attr">startAfterTime</span>: <span class="built_in">Date</span>.now()&#125;).then(<span class="function">(<span class="params">receiver</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">`Created partition receiver: <span class="subst">$&#123;partitionId&#125;</span>`</span>);</span><br><span class="line">      receiver.on(<span class="string">'errorReceived'</span>, printError);</span><br><span class="line">      receiver.on(<span class="string">'message'</span>, printMessage);</span><br><span class="line">    &#125;)))</span><br><span class="line">    .catch(printError);</span><br></pre></td></tr></table></figure>
+<p>注意:</p>
+<ul>
+<li>客户端传的<code>properties</code>,在消息体中是<code>message.applicationProperties</code></li>
+<li><code>startAfterTime</code>或<code>startAfterOffset</code>参数来决定启动时间, 可用记录上一次消息的<code>offset</code>/<code>enqueued-time</code>来保证中断重启能够继续从未处理的消息开始读取</li>
+<li><code>message</code>包含的属性如下:</li>
+</ul>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[ <span class="string">'partitionKey'</span>,</span><br><span class="line">  <span class="string">'body'</span>,</span><br><span class="line">  <span class="string">'enqueuedTimeUtc'</span>,</span><br><span class="line">  <span class="string">'offset'</span>,</span><br><span class="line">  <span class="string">'properties'</span>,</span><br><span class="line">  <span class="string">'applicationProperties'</span>,</span><br><span class="line">  <span class="string">'sequenceNumber'</span>,</span><br><span class="line">  <span class="string">'annotations'</span>,</span><br><span class="line">  <span class="string">'systemProperties'</span> ]</span><br></pre></td></tr></table></figure>
+<p>消息体示例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Message received:</span><br><span class="line">partitionKey undefined</span><br><span class="line">body &#123; deviceId: <span class="string">'myFirstNodeDevice'</span>, windSpeed: 10.51685587945142 &#125;</span><br><span class="line">enqueuedTimeUtc 2017-06-13T01:21:02.519Z</span><br><span class="line">offset 73240</span><br><span class="line">properties undefined</span><br><span class="line">applicationProperties &#123; asdf: <span class="string">'asdfz'</span> &#125;</span><br><span class="line">sequenceNumber 182</span><br><span class="line">annotations &#123; <span class="string">'x-opt-sequence-number'</span>: 182,</span><br><span class="line">  <span class="string">'x-opt-offset'</span>: <span class="string">'73240'</span>,</span><br><span class="line">  <span class="string">'x-opt-enqueued-time'</span>: 2017-06-13T01:21:02.519Z,</span><br><span class="line">  <span class="string">'iothub-connection-device-id'</span>: <span class="string">'myFirstNodeDevice'</span>,</span><br><span class="line">  <span class="string">'iothub-connection-auth-method'</span>: <span class="string">'&#123; "scope": "device", "type": "sas", "issuer": "iothub" &#125;'</span>,</span><br><span class="line">  <span class="string">'iothub-connection-auth-generation-id'</span>: <span class="string">'xxxxxxx'</span>,</span><br><span class="line">  <span class="string">'iothub-enqueuedtime'</span>: 2017-06-13T01:21:02.786Z,</span><br><span class="line">  <span class="string">'iothub-message-source'</span>: <span class="string">'Telemetry'</span> &#125;</span><br><span class="line">systemProperties undefined</span><br></pre></td></tr></table></figure>
+<h2 id="配置路由-需要Event-Hubs"><a href="#配置路由-需要Event-Hubs" class="headerlink" title="配置路由(需要Event Hubs)"></a>配置路由(需要Event Hubs)</h2><h3 id="1-创建Event-Hubs"><a href="#1-创建Event-Hubs" class="headerlink" title="1. 创建Event Hubs"></a>1. 创建Event Hubs</h3><h3 id="2-从事件中心创建实体"><a href="#2-从事件中心创建实体" class="headerlink" title="2. 从事件中心创建实体"></a>2. 从事件中心创建实体</h3><p><img src="https://user-images.githubusercontent.com/1890238/27019465-566b06d4-4efe-11e7-8a74-240c0c523ac4.png" alt="eventhubs-entities"></p>
+<h3 id="3-获取连接字符串"><a href="#3-获取连接字符串" class="headerlink" title="3. 获取连接字符串"></a>3. 获取连接字符串</h3><p>点击进入已创建的实体</p>
+<p><img src="https://user-images.githubusercontent.com/1890238/27019487-89f17e8e-4efe-11e7-815c-c3d62a3213ef.png" alt="eventhubs-key"></p>
+<p>不要从别处获得连接字符串,因为可能无法连接. 最终获得的连接字符串应当包含<code>EntityPath</code>字段,类似:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Endpoint=sb://xxxx.servicebus.chinacloudapi.cn/;SharedAccessKeyName=iothubroutes_xxxx;SharedAccessKey=xxxx;EntityPath=xxxx</span><br></pre></td></tr></table></figure>
+<h3 id="4-创建Endpoint"><a href="#4-创建Endpoint" class="headerlink" title="4. 创建Endpoint"></a>4. 创建Endpoint</h3><p><img src="https://user-images.githubusercontent.com/1890238/27019555-23edcb5a-4eff-11e7-89e6-57f88d241612.png" alt="iothub-endpoints"></p>
+<p>将 Event Hubs 里的事件关联到 IoT Hub</p>
+<h3 id="5-创建路由"><a href="#5-创建路由" class="headerlink" title="5. 创建路由"></a>5. 创建路由</h3><p><img src="https://user-images.githubusercontent.com/1890238/27019570-5238cd52-4eff-11e7-932f-78a8a97d0246.png" alt="iothub-route"></p>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><h4 id="1-修改刚才的发送示例"><a href="#1-修改刚才的发送示例" class="headerlink" title="1. 修改刚才的发送示例"></a>1. 修改刚才的发送示例</h4><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> clientFromConnectionString = <span class="built_in">require</span>(<span class="string">'azure-iot-device-mqtt'</span>).clientFromConnectionString;</span><br><span class="line"><span class="keyword">const</span> Message = <span class="built_in">require</span>(<span class="string">'azure-iot-device'</span>).Message;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> connectionString = <span class="string">'HostName=[修改连接主机];DeviceId=[deviceID];SharedAccessKey=[连接密钥]'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> client = clientFromConnectionString(connectionString);</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">printResultFor</span>(<span class="params">op</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">printResult</span>(<span class="params">err, res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (err) <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;op&#125;</span> error: <span class="subst">$&#123;err.toString()&#125;</span>`</span>);</span><br><span class="line">    <span class="keyword">if</span> (res) <span class="built_in">console</span>.log(<span class="string">`<span class="subst">$&#123;op&#125;</span> status: <span class="subst">$&#123;res.constructor.name&#125;</span>`</span>);</span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> connectCallback = <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span> (err) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`Could not connect: <span class="subst">$&#123;err&#125;</span>`</span>);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'Client connected'</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Create a message and send it to the IoT Hub every second</span></span><br><span class="line">    setInterval(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">const</span> windSpeed = <span class="number">10</span> + (<span class="built_in">Math</span>.random() * <span class="number">4</span>);</span><br><span class="line">      <span class="keyword">const</span> data = <span class="built_in">JSON</span>.stringify(&#123; <span class="attr">deviceId</span>: <span class="string">'myFirstNodeDevice'</span>, windSpeed &#125;);</span><br><span class="line">      <span class="keyword">const</span> message = <span class="keyword">new</span> Message(data);</span><br><span class="line">      <span class="comment">// 随机发送到路由或默认事件上</span></span><br><span class="line">      <span class="keyword">if</span> (<span class="built_in">Math</span>.round(<span class="built_in">Math</span>.random()) === <span class="number">1</span>) &#123;</span><br><span class="line">        message.properties.add(<span class="string">'route'</span>, <span class="string">'test'</span>);</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">`Sending message: <span class="subst">$&#123;message.getData()&#125;</span>`</span>);</span><br><span class="line">      client.sendEvent(message, printResultFor(<span class="string">'send'</span>));</span><br><span class="line">    &#125;, <span class="number">1000</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">client.open(connectCallback);</span><br></pre></td></tr></table></figure>
+<h4 id="2-IoT-Hub-侦听启动"><a href="#2-IoT-Hub-侦听启动" class="headerlink" title="2. IoT Hub 侦听启动"></a>2. IoT Hub 侦听启动</h4><p>无需修改,直接启动</p>
+<h4 id="3-Event-Hubs-侦听启动"><a href="#3-Event-Hubs-侦听启动" class="headerlink" title="3. Event Hubs 侦听启动"></a>3. Event Hubs 侦听启动</h4><p>复制 IoT Hub 侦听源码,修改连接字符串:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> EventHubClient = <span class="built_in">require</span>(<span class="string">'azure-event-hubs'</span>).Client;</span><br><span class="line"></span><br><span class="line"><span class="comment">// const connectionString = 'HostName=[修改连接主机];SharedAccessKeyName=iothubowner;SharedAccessKey=[修改连接密钥]';</span></span><br><span class="line"><span class="keyword">const</span> connectionString = <span class="string">'Endpoint=[sb://修改连接主机.servicebus.chinacloudapi.cn/];SharedAccessKeyName=[修改连接策略];SharedAccessKey=[x修改连接密钥];EntityPath=[事件实体]'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> printError = <span class="function"><span class="keyword">function</span> (<span class="params">err</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(err.message);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> printMessage = <span class="function"><span class="keyword">function</span> (<span class="params">message</span>) </span>&#123;</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">'Message received: '</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(message.body));</span><br><span class="line">  <span class="built_in">console</span>.log(message);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">''</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> client = EventHubClient.fromConnectionString(connectionString);</span><br><span class="line"></span><br><span class="line">client.open()</span><br><span class="line">    .then(client.getPartitionIds.bind(client))</span><br><span class="line">    .then(<span class="function"><span class="params">partitionIds</span> =&gt;</span> partitionIds.map(<span class="function"><span class="params">partitionId</span> =&gt;</span> client.createReceiver(<span class="string">'$Default'</span>, partitionId, &#123; <span class="attr">startAfterTime</span>: <span class="built_in">Date</span>.now()&#125;).then(<span class="function">(<span class="params">receiver</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="built_in">console</span>.log(<span class="string">`Created partition receiver: <span class="subst">$&#123;partitionId&#125;</span>`</span>);</span><br><span class="line">      receiver.on(<span class="string">'errorReceived'</span>, printError);</span><br><span class="line">      receiver.on(<span class="string">'message'</span>, printMessage);</span><br><span class="line">    &#125;)))</span><br><span class="line">    .catch(printError);</span><br></pre></td></tr></table></figure>
+<h4 id="测试结果"><a href="#测试结果" class="headerlink" title="测试结果"></a>测试结果</h4><ul>
+<li>发送到默认路由的,只能被IoT Hub侦听应用捕获.</li>
+<li>发送到刚才配置的测试路由的,只能被Event Hubs侦听应用捕获.</li>
+</ul>
+<p>至此,完成路由转发.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/node-js/" rel="tag"># node.js</a>
+          
+            <a href="/tags/azure/" rel="tag"># azure</a>
+          
+            <a href="/tags/iothub/" rel="tag"># iothub</a>
+          
+            <a href="/tags/eventhubs/" rel="tag"># eventhubs</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2017/willin-azure-storage-nodejs/" rel="next" title="Willin: Azure Node.js Blob文件上传">
+                <i class="fa fa-chevron-left"></i> Willin: Azure Node.js Blob文件上传
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2017/willin-cluster-in-nodejs/" rel="prev" title="Willin: Node.js CPU调度优化">
+                Willin: Node.js CPU调度优化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="AirDwing Team">
+          <p class="site-author-name" itemprop="name">AirDwing Team</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://willin.wang/" title="Willin" target="_blank">Willin</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.skitisu.com/" title="SkiTisu" target="_blank">SkiTisu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简单发送接收示例"><span class="nav-number">1.</span> <span class="nav-text">简单发送接收示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-注册设备"><span class="nav-number">1.1.</span> <span class="nav-text">1. 注册设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-模拟设备发送消息"><span class="nav-number">1.2.</span> <span class="nav-text">2. 模拟设备发送消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-服务器端接收消息"><span class="nav-number">1.3.</span> <span class="nav-text">3. 服务器端接收消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置路由-需要Event-Hubs"><span class="nav-number">2.</span> <span class="nav-text">配置路由(需要Event Hubs)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-创建Event-Hubs"><span class="nav-number">2.1.</span> <span class="nav-text">1. 创建Event Hubs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-从事件中心创建实体"><span class="nav-number">2.2.</span> <span class="nav-text">2. 从事件中心创建实体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-获取连接字符串"><span class="nav-number">2.3.</span> <span class="nav-text">3. 获取连接字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-创建Endpoint"><span class="nav-number">2.4.</span> <span class="nav-text">4. 创建Endpoint</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-创建路由"><span class="nav-number">2.5.</span> <span class="nav-text">5. 创建路由</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#示例代码"><span class="nav-number">2.6.</span> <span class="nav-text">示例代码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-修改刚才的发送示例"><span class="nav-number">2.6.1.</span> <span class="nav-text">1. 修改刚才的发送示例</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-IoT-Hub-侦听启动"><span class="nav-number">2.6.2.</span> <span class="nav-text">2. IoT Hub 侦听启动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Event-Hubs-侦听启动"><span class="nav-number">2.6.3.</span> <span class="nav-text">3. Event Hubs 侦听启动</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#测试结果"><span class="nav-number">2.6.4.</span> <span class="nav-text">测试结果</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AirDwing Team</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

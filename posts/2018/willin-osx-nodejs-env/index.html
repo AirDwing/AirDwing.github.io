@@ -1,0 +1,831 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="node.js,dev,fe,be,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AirDwing" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="高效工具 Brew： 用于安装各类 *nix 依赖包和应用 dnsmasq： Localhost下的泛域名指定（Brew 安装） LaunchRocket： Brew 应用 GUI 管理工具（Brew Cask 安装） iTerm + Oh My Zsh!： 高效 Shell 工具 iStat Menus：系统监控 CheatSheet： 按住 ⌘ command 不放弹出快捷键菜单 Moom：">
+<meta name="keywords" content="node.js,dev,fe,be">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Willin: 使用 OS X 进行高效 JS 前后端开发">
+<meta property="og:url" content="http://blog.airdwing.com/posts/2018/willin-osx-nodejs-env/index.html">
+<meta property="og:site_name" content="AirDwing">
+<meta property="og:description" content="高效工具 Brew： 用于安装各类 *nix 依赖包和应用 dnsmasq： Localhost下的泛域名指定（Brew 安装） LaunchRocket： Brew 应用 GUI 管理工具（Brew Cask 安装） iTerm + Oh My Zsh!： 高效 Shell 工具 iStat Menus：系统监控 CheatSheet： 按住 ⌘ command 不放弹出快捷键菜单 Moom：">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-04T04:49:33.394Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Willin: 使用 OS X 进行高效 JS 前后端开发">
+<meta name="twitter:description" content="高效工具 Brew： 用于安装各类 *nix 依赖包和应用 dnsmasq： Localhost下的泛域名指定（Brew 安装） LaunchRocket： Brew 应用 GUI 管理工具（Brew Cask 安装） iTerm + Oh My Zsh!： 高效 Shell 工具 iStat Menus：系统监控 CheatSheet： 按住 ⌘ command 不放弹出快捷键菜单 Moom：">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.airdwing.com/posts/2018/willin-osx-nodejs-env/">
+
+
+
+
+
+  <title>Willin: 使用 OS X 进行高效 JS 前后端开发 | AirDwing</title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AirDwing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://blog.airdwing.com/posts/2018/willin-osx-nodejs-env/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AirDwing Team">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AirDwing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Willin: 使用 OS X 进行高效 JS 前后端开发</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-14T23:45:53+00:00">
+                2018-01-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Dev/" itemprop="url" rel="index">
+                    <span itemprop="name">Dev</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="高效工具"><a href="#高效工具" class="headerlink" title="高效工具"></a>高效工具</h2><ul>
+<li>Brew： 用于安装各类 *nix 依赖包和应用</li>
+<li>dnsmasq： Localhost下的泛域名指定（Brew 安装）</li>
+<li>LaunchRocket： Brew 应用 GUI 管理工具（Brew Cask 安装）</li>
+<li>iTerm + Oh My Zsh!： 高效 Shell 工具</li>
+<li>iStat Menus：系统监控</li>
+<li>CheatSheet： 按住 <code>⌘ command</code> 不放弹出快捷键菜单</li>
+<li>Moom： 窗口分屏工具</li>
+<li>iHosts： 本地域名解析管理工具</li>
+<li>RescueTime： 记录每天你到底只tm专注工作了几分钟（胆小勿入）</li>
+</ul>
+<a id="more"></a>
+<h2 id="IDE-配置"><a href="#IDE-配置" class="headerlink" title="IDE 配置"></a>IDE 配置</h2><h3 id="VS-Code-插件"><a href="#VS-Code-插件" class="headerlink" title="VS Code 插件"></a>VS Code 插件</h3><ul>
+<li>Auto Close Tag：用于前端 HTML 模板</li>
+<li>Auto Rename Tag：用于前端 HTML 模板</li>
+<li>Can I Use：前端兼容性检测</li>
+<li>EditorConfig for VS Code： 必装</li>
+<li>ESlint： 必装</li>
+<li>Git Lens： git 辅助工具</li>
+<li>Path Intellisense： 引用路径智能提示</li>
+<li>TODO Highlight： 见字如面</li>
+<li>Vetur： 用于前端 Vue 项目</li>
+<li>vscode-proto3： 用于 ProtoBuf 项目</li>
+</ul>
+<p>不推荐安装过多插件，多余插件不仅影响 IDE 速度，更可能造成冲突。建议只开启几个必须的插件，其他如 Vetur 只在特定项目内开启即可。</p>
+<h3 id="配置参考"><a href="#配置参考" class="headerlink" title="配置参考"></a>配置参考</h3><p>只提出了一些关键的配置：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 将设置放入此文件中以覆盖默认设置</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 编辑器自带的配置也需要设置，避免与 EditorConfig 冲突</span></span><br><span class="line">  <span class="string">"editor.tabSize"</span>: <span class="number">2</span>,</span><br><span class="line">  <span class="string">"editor.insertSpaces"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// 实时格式化</span></span><br><span class="line">  <span class="string">"editor.formatOnType"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// 迷你地图</span></span><br><span class="line">  <span class="string">"editor.minimap.enabled"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// 折行</span></span><br><span class="line">  <span class="string">"editor.wordWrap"</span>: <span class="string">"on"</span>,</span><br><span class="line">  <span class="string">"extensions.autoUpdate"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// 文件自动保存</span></span><br><span class="line">  <span class="string">"files.autoSave"</span>: <span class="string">"afterDelay"</span>,</span><br><span class="line">  <span class="string">"files.autoSaveDelay"</span>: <span class="number">5000</span>,</span><br><span class="line">  <span class="comment">// 左侧资源管理器隐藏以下文件/目录</span></span><br><span class="line">  <span class="string">"files.exclude"</span>: &#123;</span><br><span class="line">    <span class="string">"**/.git"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"**/.svn"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"**/.hg"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"**/.DS_Store"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"**/bower_components"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"**/tmp"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"**/vendor"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"**/node_modules"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"**/dist"</span>: <span class="literal">true</span>,</span><br><span class="line">    <span class="string">"**/.cache"</span>: <span class="literal">true</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="comment">// 默认 cmd 终端</span></span><br><span class="line">  <span class="string">"terminal.external.osxExec"</span>: <span class="string">"iTerm.app"</span>,</span><br><span class="line">  <span class="string">"telemetry.enableTelemetry"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"telemetry.enableCrashReporter"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="string">"window.zoomLevel"</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="comment">// 插件定义</span></span><br><span class="line">  <span class="comment">// 关闭自带 js 校验，避免与 ESLint 插件冲突</span></span><br><span class="line">  <span class="string">"javascript.validate.enable"</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="comment">// ESLint 自动修复</span></span><br><span class="line">  <span class="string">"eslint.autoFixOnSave"</span>: <span class="literal">true</span>,</span><br><span class="line">  <span class="comment">// ESLint 加入 Vue 格式支持</span></span><br><span class="line">  <span class="string">"eslint.validate"</span>: [</span><br><span class="line">    <span class="string">"javascript"</span>,</span><br><span class="line">    <span class="string">"javascriptreact"</span>,</span><br><span class="line">     &#123; <span class="string">"language"</span>: <span class="string">"vue"</span>, <span class="string">"autoFix"</span>: <span class="literal">true</span> &#125;,</span><br><span class="line">     &#123; <span class="string">"language"</span>: <span class="string">"html"</span>, <span class="string">"autoFix"</span>: <span class="literal">true</span> &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="键位设置"><a href="#键位设置" class="headerlink" title="键位设置"></a>键位设置</h3><p>根据个人习惯及键盘布局进行优化，示例：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">  <span class="comment">// 针对 HHKB 键盘优化</span></span><br><span class="line">  &#123; <span class="string">"key"</span>: <span class="string">"cmd+escape"</span>, <span class="string">"command"</span>: <span class="string">"workbench.action.terminal.toggleTerminal"</span> &#125;,</span><br><span class="line">  &#123; <span class="string">"key"</span>: <span class="string">"cmd+shift+escape"</span>, <span class="string">"command"</span>: <span class="string">"workbench.action.showErrorsWarnings"</span>&#125;,</span><br><span class="line">  &#123; <span class="string">"key"</span>: <span class="string">"alt+i"</span>, <span class="string">"command"</span>: <span class="string">"cursorUp"</span>, <span class="string">"when"</span>: <span class="string">"editorTextFocus"</span> &#125;,</span><br><span class="line">  &#123; <span class="string">"key"</span>: <span class="string">"alt+j"</span>, <span class="string">"command"</span>: <span class="string">"cursorLeft"</span>, <span class="string">"when"</span>: <span class="string">"editorTextFocus"</span> &#125;,</span><br><span class="line">  &#123; <span class="string">"key"</span>: <span class="string">"alt+k"</span>, <span class="string">"command"</span>: <span class="string">"cursorDown"</span>, <span class="string">"when"</span>: <span class="string">"editorTextFocus"</span> &#125;,</span><br><span class="line">  &#123; <span class="string">"key"</span>: <span class="string">"alt+l"</span>, <span class="string">"command"</span>: <span class="string">"cursorRight"</span>, <span class="string">"when"</span>: <span class="string">"editorTextFocus"</span> &#125;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h2 id="项目配置"><a href="#项目配置" class="headerlink" title="项目配置"></a>项目配置</h2><p>创建项目应养成的几个习惯步骤：</p>
+<ol>
+<li>创建 .editorconfig 配置</li>
+<li>创建 .eslintrc 配置</li>
+<li>创建 .gitignore 配置</li>
+<li>创建 .babelrc 配置（*）</li>
+</ol>
+<h3 id="editorconfig-配置"><a href="#editorconfig-配置" class="headerlink" title=".editorconfig 配置"></a>.editorconfig 配置</h3><p>通用，所有项目应都保持该配置一致：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#  See http://editorconfig.org/</span></span><br><span class="line"><span class="string">root</span> <span class="string">=</span> <span class="literal">true</span></span><br><span class="line"><span class="string">[*]</span></span><br><span class="line"><span class="string">indent_style</span> <span class="string">=</span> <span class="string">space</span></span><br><span class="line"><span class="string">indent_size</span> <span class="string">=</span> <span class="number">2</span></span><br><span class="line"><span class="string">end_of_line</span> <span class="string">=</span> <span class="string">lf</span></span><br><span class="line"><span class="string">charset</span> <span class="string">=</span> <span class="string">utf-8</span></span><br><span class="line"><span class="string">trim_trailing_whitespace</span> <span class="string">=</span> <span class="literal">true</span></span><br><span class="line"><span class="string">insert_final_newline</span> <span class="string">=</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<h3 id="eslintrc-yml-配置"><a href="#eslintrc-yml-配置" class="headerlink" title=".eslintrc.yml 配置"></a>.eslintrc.yml 配置</h3><p>通用，后端可直接使用：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">root:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">extends:</span> <span class="string">'dwing'</span></span><br></pre></td></tr></table></figure>
+<p>在这个基础上可以进行一些扩展，如：</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">root:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">extends:</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">'plugin:vue/recommended'</span></span><br><span class="line"><span class="bullet">  -</span> <span class="string">'dwing'</span></span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line">  <span class="string">import/extensions:</span> <span class="string">[2,</span> <span class="string">'always'</span><span class="string">,</span> <span class="string">&#123;</span> <span class="attr">js:</span> <span class="string">'never'</span><span class="string">,</span> <span class="attr">vue:</span> <span class="string">'always'</span> <span class="string">&#125;]</span></span><br><span class="line"><span class="attr">settings:</span></span><br><span class="line">  <span class="string">import/resolver:</span></span><br><span class="line"><span class="attr">    webpack:</span></span><br><span class="line"><span class="attr">      config:</span> <span class="string">'build/webpack.config.js'</span></span><br></pre></td></tr></table></figure>
+<h3 id="gitignore-配置"><a href="#gitignore-配置" class="headerlink" title=".gitignore 配置"></a>.gitignore 配置</h3><p>默认配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">node_modules/</span><br><span class="line">.nyc_output/</span><br><span class="line">.cache/</span><br><span class="line">demo/</span><br><span class="line">dist/</span><br><span class="line"></span><br><span class="line">*.log</span><br><span class="line">*.log.*</span><br><span class="line">.DS_Store</span><br><span class="line">dump.rdb</span><br><span class="line">coverage.lcov</span><br></pre></td></tr></table></figure>
+<h3 id="babelrc-配置"><a href="#babelrc-配置" class="headerlink" title=".babelrc 配置"></a>.babelrc 配置</h3><p>默认配置：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"presets"</span>: [</span><br><span class="line">    [<span class="string">"env"</span>, &#123;</span><br><span class="line">      <span class="attr">"targets"</span>: &#123;</span><br><span class="line">        <span class="attr">"browsers"</span>: [<span class="string">"last 2 versions"</span>]</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;]</span><br><span class="line">  ],</span><br><span class="line">  <span class="attr">"plugins"</span>: [</span><br><span class="line">    [<span class="string">"transform-runtime"</span>, &#123;</span><br><span class="line">      <span class="attr">"helpers"</span>: <span class="literal">false</span>,</span><br><span class="line">      <span class="attr">"polyfill"</span>: <span class="literal">false</span>,</span><br><span class="line">      <span class="attr">"regenerator"</span>: <span class="literal">true</span>,</span><br><span class="line">      <span class="attr">"moduleName"</span>: <span class="string">"babel-runtime"</span></span><br><span class="line">    &#125;]</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>默认需要安装 <code>babel-preset-env</code>、<code>babel-plugin-transform-runtime</code>、<code>babel-runtime</code>。</p>
+<p>添加插件务必谨慎，任何一个插件都可能导致一个几百字节的 <code>Hello World</code> 变成几十甚至几百 KB。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/node-js/" rel="tag"># node.js</a>
+          
+            <a href="/tags/dev/" rel="tag"># dev</a>
+          
+            <a href="/tags/fe/" rel="tag"># fe</a>
+          
+            <a href="/tags/be/" rel="tag"># be</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2017/willin-airx-development-guide/" rel="next" title="Willin: AirX 开发最佳实践">
+                <i class="fa fa-chevron-left"></i> Willin: AirX 开发最佳实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2019/willin-aliyun-practice/" rel="prev" title="Willin: 大翼航空：云上自动化测试与持续集成实践">
+                Willin: 大翼航空：云上自动化测试与持续集成实践 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="AirDwing Team">
+          <p class="site-author-name" itemprop="name">AirDwing Team</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://willin.wang/" title="Willin" target="_blank">Willin</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.skitisu.com/" title="SkiTisu" target="_blank">SkiTisu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#高效工具"><span class="nav-number">1.</span> <span class="nav-text">高效工具</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IDE-配置"><span class="nav-number">2.</span> <span class="nav-text">IDE 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#VS-Code-插件"><span class="nav-number">2.1.</span> <span class="nav-text">VS Code 插件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#配置参考"><span class="nav-number">2.2.</span> <span class="nav-text">配置参考</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#键位设置"><span class="nav-number">2.3.</span> <span class="nav-text">键位设置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目配置"><span class="nav-number">3.</span> <span class="nav-text">项目配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#editorconfig-配置"><span class="nav-number">3.1.</span> <span class="nav-text">.editorconfig 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#eslintrc-yml-配置"><span class="nav-number">3.2.</span> <span class="nav-text">.eslintrc.yml 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gitignore-配置"><span class="nav-number">3.3.</span> <span class="nav-text">.gitignore 配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#babelrc-配置"><span class="nav-number">3.4.</span> <span class="nav-text">.babelrc 配置</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AirDwing Team</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

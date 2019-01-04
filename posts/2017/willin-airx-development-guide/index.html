@@ -1,0 +1,958 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="node.js,airx,dev,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="AirDwing" type="application/atom+xml">
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1">
+
+
+
+
+
+
+<meta name="description" content="接入流程 完成认证(个人/组织) 创建应用 完成应用功能的开发测试 提交审核 审核完成后, 正式上线">
+<meta name="keywords" content="node.js,airx,dev">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Willin: AirX 开发最佳实践">
+<meta property="og:url" content="http://blog.airdwing.com/posts/2017/willin-airx-development-guide/index.html">
+<meta property="og:site_name" content="AirDwing">
+<meta property="og:description" content="接入流程 完成认证(个人/组织) 创建应用 完成应用功能的开发测试 提交审核 审核完成后, 正式上线">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-01-04T04:49:33.394Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Willin: AirX 开发最佳实践">
+<meta name="twitter:description" content="接入流程 完成认证(个人/组织) 创建应用 完成应用功能的开发测试 提交审核 审核完成后, 正式上线">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"always","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://blog.airdwing.com/posts/2017/willin-airx-development-guide/">
+
+
+
+
+
+  <title>Willin: AirX 开发最佳实践 | AirDwing</title>
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">AirDwing</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://blog.airdwing.com/posts/2017/willin-airx-development-guide/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="AirDwing Team">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="AirDwing">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Willin: AirX 开发最佳实践</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-17T00:29:57+00:00">
+                2017-08-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Dev/" itemprop="url" rel="index">
+                    <span itemprop="name">Dev</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="接入流程"><a href="#接入流程" class="headerlink" title="接入流程"></a>接入流程</h1><ol>
+<li>完成认证(个人/组织)</li>
+<li>创建应用</li>
+<li>完成应用功能的开发测试</li>
+<li>提交审核</li>
+<li>审核完成后, 正式上线</li>
+</ol>
+<a id="more"></a>
+<h1 id="开发流程"><a href="#开发流程" class="headerlink" title="开发流程"></a>开发流程</h1><p>创建应用后, 将得到:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  SecretId: <span class="string">'AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA'</span>,</span><br><span class="line">  SecretKey: <span class="string">'Gu5t9xGARNpq86cd98joQYCN3Cozk1qA'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样的信息, 妥善保管 <code>SecretKey</code> 切勿在任何情况下进行泄露.</p>
+<h2 id="公共请求参数"><a href="#公共请求参数" class="headerlink" title="公共请求参数"></a>公共请求参数</h2><table>
+<thead>
+<tr>
+<th style="text-align:right">名称</th>
+<th style="text-align:center">类型</th>
+<th style="text-align:left">描述</th>
+<th style="text-align:center">是否必选</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">Timestamp</td>
+<td style="text-align:center">UInt</td>
+<td style="text-align:left">当前UNIX时间戳，可记录发起API请求的时间(如:1495608418)。</td>
+<td style="text-align:center">√</td>
+</tr>
+<tr>
+<td style="text-align:right">Nonce</td>
+<td style="text-align:center">UInt</td>
+<td style="text-align:left">随机正整数，与 Timestamp 联合起来, 用于防止重放攻击。</td>
+<td style="text-align:center">√</td>
+</tr>
+<tr>
+<td style="text-align:right">SignatureMethod</td>
+<td style="text-align:center">String</td>
+<td style="text-align:left">用来说明Signature签名使用的签名算法，字段值可为”HmacSHA256”和”HmacSHA1”。目前支持HmacSHA256和HmacSHA1两种签名算法，用户不传该字段默认使用HmacSHA1签名算法。若用户填写的字段值错误，则也默认使用HmacSHA1签名算法。</td>
+<td style="text-align:center">×</td>
+</tr>
+<tr>
+<td style="text-align:right">SecretId</td>
+<td style="text-align:center">String</td>
+<td style="text-align:left">在<a href="#">云API密钥</a>上申请的标识身份的 SecretId，一个 SecretId 对应唯一的 SecretKey , 而 SecretKey 会用来生成请求签名 Signature。具体可参考 <a href="#">签名方法</a> 页面。</td>
+<td style="text-align:center">√</td>
+</tr>
+<tr>
+<td style="text-align:right">Signature</td>
+<td style="text-align:center">String</td>
+<td style="text-align:left">请求签名，用来验证此次请求的合法性，由系统根据输入参数自动生成。具体可参考 <a href="#">签名方法</a> 页面。</td>
+<td style="text-align:center">√</td>
+</tr>
+</tbody>
+</table>
+<p>假设用户想要查询用户是否存在，则其GET请求链接的形式可能如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">https://api.dwi.ng/user/check/13312341234?</span><br><span class="line">SecretId=xxxxxxx</span><br><span class="line">&amp;Timestamp=1495608418</span><br><span class="line">&amp;Nonce=59485</span><br><span class="line">&amp;Signature=mysignature</span><br><span class="line">&amp;&lt;接口请求参数&gt;</span><br></pre></td></tr></table></figure>
+<p>如果是POST请求,参数必须全部放置在表单内(而非使用QueryString方式传递)。</p>
+<h3 id="公共返回结果"><a href="#公共返回结果" class="headerlink" title="公共返回结果"></a>公共返回结果</h3><p>请求成功:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"status"</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="string">"data"</span>: &#123;</span><br><span class="line">    <span class="comment">// 成功返回的结果数据</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>请求失败:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"status"</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="string">"code"</span>: <span class="number">1000</span> <span class="comment">// 错误码</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="签名机制"><a href="#签名机制" class="headerlink" title="签名机制"></a>签名机制</h2><p>假设用户的 SecretId 和 SecretKey 分别是：</p>
+<blockquote>
+<p>SecretId: AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA</p>
+<p>SecretKey: Gu5t9xGARNpq86cd98joQYCN3Cozk1qA</p>
+</blockquote>
+<p>注意：这里只是示例，请用户根据自己实际的SecretId和SecretKey和请求参数进行后续操作！</p>
+<p>以查看用户是否存在(/user/check/:username)请求为例，当用户调用这一接口时，其请求参数可能如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:right">参数名称</th>
+<th style="text-align:left">中文</th>
+<th style="text-align:left">参数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right">SecretId</td>
+<td style="text-align:left">密钥Id</td>
+<td style="text-align:left">AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA</td>
+</tr>
+<tr>
+<td style="text-align:right">Timestamp</td>
+<td style="text-align:left">当前时间戳</td>
+<td style="text-align:left">1465185768</td>
+</tr>
+<tr>
+<td style="text-align:right">Nonce</td>
+<td style="text-align:left">随机正整数</td>
+<td style="text-align:left">11886</td>
+</tr>
+<tr>
+<td style="text-align:right">SignatureMethod</td>
+<td style="text-align:left">签名方式</td>
+<td style="text-align:left">HmacSHA256</td>
+</tr>
+</tbody>
+</table>
+<h3 id="对参数排序"><a href="#对参数排序" class="headerlink" title="对参数排序"></a>对参数排序</h3><p>首先对所有请求参数按参数名做字典序升序排列，所谓字典序升序排列，直观上就如同在字典中排列单词一样排序，按照字母表或数字表里递增顺序的排列次序，即先考虑第一个“字母”，在相同的情况下考虑第二个“字母”，依此类推。您可以借助编程语言中的相关排序函数来实现这一功能，如php中的ksort函数。上述示例参数的排序结果如下:</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">'Nonce'</span> : <span class="number">11886</span>,</span><br><span class="line">    <span class="string">'SecretId'</span> : <span class="string">'AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA'</span>,</span><br><span class="line">    <span class="string">'SignatureMethod'</span> : <span class="string">'HmacSHA256'</span>,</span><br><span class="line">    <span class="string">'Timestamp'</span> : <span class="number">1465185768</span>,</span><br><span class="line">    <span class="string">'mobile'</span>: <span class="string">'13300001111'</span>,</span><br><span class="line">    <span class="string">'password'</span>: <span class="string">'xxxxxxxxxxxxxxxx'</span>,</span><br><span class="line">    <span class="string">'key'</span>: <span class="string">'2222'</span>,</span><br><span class="line">    <span class="string">'code'</span>: <span class="string">'1111'</span>,</span><br><span class="line">    <span class="string">'guid'</span>: <span class="string">'123456'</span>,</span><br><span class="line">    <span class="string">'device'</span>: <span class="string">'iphone'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用其它程序设计语言开发时, 可对上面示例中的参数进行排序，得到的结果一致即可。</p>
+<h3 id="拼接请求字符串"><a href="#拼接请求字符串" class="headerlink" title="拼接请求字符串"></a>拼接请求字符串</h3><p>此步骤生成请求字符串。</p>
+<p>将把上一步排序好的请求参数格式化成“参数名称”=“参数值”的形式。</p>
+<p><strong>注意：1、“参数值”为原始值而非url编码后的值。2、若输入参数的Key中包含下划线，则需要将其转换为“.”，但是Value中的下划线则不用转换。如Placement_Zone=CN_GUANGZHOU,则需要将其转换成Placement.Zone=CN_GUANGZHOU。</strong></p>
+<p>然后将格式化后的各个参数用”&amp;”拼接在一起，最终生成的请求字符串为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Nonce=33954&amp;SecretId=AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA&amp;Timestamp=1496305987&amp;code=1111&amp;device=iph</span><br><span class="line">one&amp;guid=123456&amp;key=2222&amp;mobile=13300001111&amp;password=xxxxxxxxxxxxxxxx</span><br></pre></td></tr></table></figure>
+<h3 id="拼接签名原文字符串"><a href="#拼接签名原文字符串" class="headerlink" title="拼接签名原文字符串"></a>拼接签名原文字符串</h3><p>此步骤生成签名原文字符串。<br>签名原文字符串由以下几个参数构成:</p>
+<p>1) 请求方法: 支持 POST 和 GET 方式, 这里使用 GET 请求, 注意方法为全大写。<br>2) 请求主机: 请求域名为：api.dwi.ng。<br>3) 请求路径: 如 /user/check/13112341234。<br>4) 请求字符串: 即上一步生成的请求字符串。</p>
+<p>签名原文串的拼接规则为:</p>
+<blockquote>
+<p>请求方法 + 请求主机 + 请求路径 + ? + 请求字符串</p>
+</blockquote>
+<p>示例的拼接结果为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">POSTapi.dwi.ng/user/register/mobile?Nonce=33954&amp;SecretId=AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA&amp;Timestamp=1496305987&amp;code=1111&amp;device=iph</span><br><span class="line">one&amp;guid=123456&amp;key=2222&amp;mobile=13300001111&amp;password=xxxxxxxxxxxx</span><br></pre></td></tr></table></figure>
+<h3 id="生成签名串"><a href="#生成签名串" class="headerlink" title="生成签名串"></a>生成签名串</h3><p>此步骤生成签名串。</p>
+<p><strong>注意：这里要根据您指定的签名算法（即SignatureMethod参数）生成签名串。当指定SignatureMethod为HmacSHA256时，需要使用HmacSHA256计算签名，其他情况请使用HmacSHA1计算签名。</strong></p>
+<p>首先使用签名算法（HmacSHA256或HmacSHA1）对上一步中获得的签名原文字符串进行签名，然后将生成的签名串使用 Base64 进行编码，即可获得最终的签名串。</p>
+<p>具体代码如下，以 PHP/node.js 语言为例，由于本例中所用的签名算法为HmacSHA256，因此生成签名串的代码如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// php</span></span><br><span class="line">$secretKey = <span class="string">'Gu5t9xGARNpq86cd98joQYCN3Cozk1qA'</span>;</span><br><span class="line">$srcStr = <span class="string">'POSTapi.dwi.ng/user/register/mobile?Nonce=33954&amp;SecretId=AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA&amp;Timestamp=1496305987&amp;code=1111&amp;device=iph'</span>;</span><br><span class="line">$signStr = base64_encode(hash_hmac(<span class="string">'sha256'</span>, $srcStr, $secretKey, <span class="keyword">true</span>));</span><br><span class="line"><span class="keyword">echo</span> $signStr;</span><br></pre></td></tr></table></figure>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// node.js</span></span><br><span class="line"><span class="keyword">const</span> crypto = <span class="built_in">require</span>(<span class="string">'crypto'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> secretKey = <span class="string">'Gu5t9xGARNpq86cd98joQYCN3Cozk1qA'</span>;</span><br><span class="line"><span class="keyword">const</span> srcStr = <span class="string">'POSTapi.dwi.ng/user/register/mobile?Nonce=33954&amp;SecretId=AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA&amp;Timestamp=1496305987&amp;code=1111&amp;device=iphone&amp;guid=123456&amp;key=2222&amp;mobile=13300001111&amp;password=xxxxxxxxxxxx'</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> hmac = crypto.createHmac(<span class="string">'sha256'</span>, secretKey);</span><br><span class="line"><span class="keyword">const</span> signStr = hmac.update(<span class="keyword">new</span> Buffer(srcStr, <span class="string">'utf8'</span>)).digest(<span class="string">'base64'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(signStr);</span><br></pre></td></tr></table></figure>
+<p>最终得到的签名串类似:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ZvlpRKOA6iQD+DGtjuiWUpN/H81v0ChwDtS2syL2hzw=</span><br></pre></td></tr></table></figure>
+<p>同理，当您指定签名算法为HmacSHA1时（即未指定SignatureMethod参数为HmacSHA256），生成签名串的代码如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// node.js</span></span><br><span class="line"><span class="keyword">const</span> crypto = <span class="built_in">require</span>(<span class="string">'crypto'</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> secretKey = <span class="string">'Gu5t9xGARNpq86cd98joQYCN3Cozk1qA'</span>;</span><br><span class="line"><span class="keyword">const</span> srcStr = <span class="string">'POSTapi.dwi.ng/user/register/mobile?Nonce=33954&amp;SecretId=AKIDz8krbsJ5yKBZQpn74WFkmLPx3gnPhESA&amp;Timestamp=1496305987&amp;code=1111&amp;device=iphone&amp;guid=123456&amp;key=2222&amp;mobile=13300001111&amp;password=xxxxxxxxxxxx'</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> hmac = crypto.createHmac(<span class="string">'sha1'</span>, secretKey);</span><br><span class="line"><span class="keyword">const</span> signStr = hmac.update(<span class="keyword">new</span> Buffer(srcStr, <span class="string">'utf8'</span>)).digest(<span class="string">'base64'</span>);</span><br><span class="line"></span><br><span class="line"><span class="built_in">console</span>.log(signStr);</span><br></pre></td></tr></table></figure>
+<p>最终得到的签名串类似：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">+QeK/Gvh2nKz0kBrscT/IHJBbYo=</span><br></pre></td></tr></table></figure>
+<p>使用其它程序设计语言开发时, 可用上面示例中的原文进行签名验证, 得到的签名串与例子中的一致即可。</p>
+<h3 id="签名串编码"><a href="#签名串编码" class="headerlink" title="签名串编码"></a>签名串编码</h3><p>生成的签名串并不能直接作为请求参数，需要对其进行 URL 编码。<br>如上一步生成的签名串为PSWUwVv4TfW2sQP1FT9KbbLjIZ9bmK8f1cL6fbpf3KI=，则其编码后为PSWUwVv4TfW2sQP1FT9KbbLjIZ9bmK8f1cL6fbpf3KI%3D。因此，最终得到的签名串请求参数(Signature)为：PSWUwVv4TfW2sQP1FT9KbbLjIZ9bmK8f1cL6fbpf3KI%3D，它将用于生成最终的请求URL。</p>
+<p><strong>注意：如果用户的请求方法是GET，则对所有请求参数的参数值均需要做URL编码；此外，部分语言库会自动对URL进行编码，重复编码会导致签名校验失败。</strong></p>
+<h3 id="鉴权失败"><a href="#鉴权失败" class="headerlink" title="鉴权失败"></a>鉴权失败</h3><p>当鉴权不通过时，可能出现的错误如下表：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">错误代码</th>
+<th style="text-align:left">错误类型</th>
+<th style="text-align:left">错误描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">4100</td>
+<td style="text-align:left">身份认证失败</td>
+<td style="text-align:left">身份验证失败，请确保您请求参数中的Signature按照上述步骤计算正确，特别注意Signature要做url编码后再发起请求。</td>
+</tr>
+<tr>
+<td style="text-align:center">4101</td>
+<td style="text-align:left">未被开发商授权访问本接口</td>
+<td style="text-align:left">该子用户未被授权调用此接口。请联系开发商授权，详情请查阅授权策略。</td>
+</tr>
+<tr>
+<td style="text-align:center">4102</td>
+<td style="text-align:left">未被开发商授权访问本接口中所操作的资源</td>
+<td style="text-align:left">请问的资源参数中，存在未被开发商授权授权访问的资源，请在message字段中查看无权查看的资源ID。请联系开发商授权，详情请查阅授权策略。</td>
+</tr>
+<tr>
+<td style="text-align:center">4103</td>
+<td style="text-align:left">非开发商的SecretId暂不支持调用本接口</td>
+<td style="text-align:left">子用户的SecretID不支持调用此接口,只有开发商有权调用。</td>
+</tr>
+<tr>
+<td style="text-align:center">4104</td>
+<td style="text-align:left">secretId不存在</td>
+<td style="text-align:left">签名所用的secretId不存在，也可能是密钥状态有误，请确保API密钥有效且未被禁用。</td>
+</tr>
+<tr>
+<td style="text-align:center">4110</td>
+<td style="text-align:left">鉴权失败</td>
+<td style="text-align:left">权限校验失败，请确保您有使用所访问资源的权限。</td>
+</tr>
+<tr>
+<td style="text-align:center">4500</td>
+<td style="text-align:left">重放攻击错误</td>
+<td style="text-align:left">请注意 Nonce 参数两次请求不能重复, Timestamp 与大翼服务器相差不能超过 2 小时。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="错误码"><a href="#错误码" class="headerlink" title="错误码"></a>错误码</h2><figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"> &#123;</span><br><span class="line">  UNKOWN_ERROR: <span class="number">1000</span>, <span class="comment">// 未知错误</span></span><br><span class="line">  INVALID_PARAMS: <span class="number">1001</span>, <span class="comment">// 参数不合法</span></span><br><span class="line">  DB_ERROR: <span class="number">1100</span>, <span class="comment">// 数据库错误</span></span><br><span class="line">  AZURE_ERROR: <span class="number">1101</span>, <span class="comment">// 微软基础服务错误</span></span><br><span class="line"></span><br><span class="line">  INVALID_SMS_CODE: <span class="number">2000</span>, <span class="comment">// 短信验证码错误</span></span><br><span class="line">  LIMITATION_SMS_CODE: <span class="number">2001</span>, <span class="comment">// 短信验证码发送限制</span></span><br><span class="line">  USERNAME_EXISTED: <span class="number">2002</span>, <span class="comment">// 用户名已经被注册</span></span><br><span class="line">  USERNAME_BINDED: <span class="number">2003</span>, <span class="comment">// 已绑定用户名</span></span><br><span class="line">  EMAIL_EXISTED: <span class="number">2004</span>, <span class="comment">// 邮箱已经被注册</span></span><br><span class="line">  MOBILE_EXISTED: <span class="number">2005</span>, <span class="comment">// 手机号已经被注册</span></span><br><span class="line">  ORG_EXISTED: <span class="number">2006</span>, <span class="comment">// 组织名称已存在</span></span><br><span class="line">  INVALID_EMAIL_CODE: <span class="number">2007</span>, <span class="comment">// 邮箱验证码错误</span></span><br><span class="line">  LIMITATION_EMAIL_CODE: <span class="number">2008</span>, <span class="comment">// 邮箱验证码发送限制</span></span><br><span class="line">  EMAIL_BINDED: <span class="number">2009</span>, <span class="comment">// 用户已经有了绑定的邮箱</span></span><br><span class="line"></span><br><span class="line">  INVALID_PASSWORD: <span class="number">2100</span>, <span class="comment">// 密码强度不符合要求</span></span><br><span class="line">  INVALID_ENCRYPTION: <span class="number">2101</span>, <span class="comment">// 加密错误</span></span><br><span class="line"></span><br><span class="line">  INVALID_USERNAME_OR_PASSWORD: <span class="number">2200</span>, <span class="comment">// 用户不存在或密码错误</span></span><br><span class="line">  INVALID_LOGIN_DEVICE: <span class="number">2201</span>, <span class="comment">// 未授权的登录设备</span></span><br><span class="line">  INVALID_USER_DEVICE_OWN: <span class="number">2202</span>, <span class="comment">// 用户未拥有此设备</span></span><br><span class="line">  INVALID_LOGIN_AUTH: <span class="number">2203</span>, <span class="comment">// 登录超时或非法登录Auth Token</span></span><br><span class="line">  USER_JOINED_ORG: <span class="number">2300</span>, <span class="comment">// 用户已经加入/创建组织</span></span><br><span class="line">  ADMIN_NOT_EXIST: <span class="number">2301</span>, <span class="comment">// 组织管理员不存在</span></span><br><span class="line">  PARENT_ORG_NOT_EXIST: <span class="number">2302</span>, <span class="comment">// 上级组织不存在</span></span><br><span class="line">  ORG_NOT_EXIST: <span class="number">2303</span>, <span class="comment">// 组织不存在</span></span><br><span class="line">  UID_NOT_MATCH_OID: <span class="number">2304</span>, <span class="comment">// 用户和组织不匹配</span></span><br><span class="line">  USER_MOBILE_EXITED: <span class="number">2305</span>, <span class="comment">// 用户手机号尚未注册</span></span><br><span class="line">  USER_TO_ADD_NOT_EXIST: <span class="number">2306</span>, <span class="comment">// 待添加的用户不存在</span></span><br><span class="line">  USER_TO_DELETE_NOT_EXIST: <span class="number">2307</span>, <span class="comment">// 待删除的用户不存在</span></span><br><span class="line">  USER_NOT_JOINED_ORG: <span class="number">2308</span>, <span class="comment">// 用户未加入组织</span></span><br><span class="line">  USER_PRIVILEGE_NOT_SUFFICIENT: <span class="number">2309</span>, <span class="comment">// 用户权限不足</span></span><br><span class="line">  ORG_FORBIDDEN: <span class="number">2310</span>, <span class="comment">// 无权操作该组织</span></span><br><span class="line">  PARENT_ORG_FORBIDDEN: <span class="number">2311</span>, <span class="comment">// 无权操作上级组织</span></span><br><span class="line">  USER_EMAIL_EXITED: <span class="number">2312</span>, <span class="comment">// 用户邮箱尚未注册</span></span><br><span class="line">  INVALID_FILE_EXT: <span class="number">2400</span>, <span class="comment">// 文件格式不合法</span></span><br><span class="line">  INVALID_FILE_TYPE: <span class="number">2401</span>, <span class="comment">// 文件类型不合法</span></span><br><span class="line">  LOG_INFO_MISS: <span class="number">2402</span>, <span class="comment">// 日志信息参数缺失</span></span><br><span class="line">  DEVICE_ALREADY_REGISTERRED: <span class="number">2500</span>, <span class="comment">// 该设备已经注册</span></span><br><span class="line">  DEVICE_NOT_EXIST: <span class="number">2501</span>, <span class="comment">// 设备未注册</span></span><br><span class="line">  DEVICE_ENABLE_IOTHUB_FAILURE: <span class="number">2502</span>, <span class="comment">// 设备iothub启用失败</span></span><br><span class="line">  DEVICE_DISABLE_IOTHUB_FAILURE: <span class="number">2503</span>, <span class="comment">// 设备iothub禁用失败</span></span><br><span class="line">  NO_PARAMS_EDIT: <span class="number">2504</span>, <span class="comment">// 修改设备信息输入参数不可用</span></span><br><span class="line">  TAPE_CREATE_FAILURE: <span class="number">2601</span>, <span class="comment">// 创建录制任务失败</span></span><br><span class="line">  PLAN_NOT_ENDED: <span class="number">2602</span>, <span class="comment">// 已经申请的任务没有终止</span></span><br><span class="line">  PLAN_ALREADY_ENDED: <span class="number">2603</span>, <span class="comment">// 已经申请的任务已经终止</span></span><br><span class="line">  VIDEO_CODE_CHECK_FAILURE: <span class="number">2604</span>, <span class="comment">// 视频直播索引码无效</span></span><br><span class="line">  DID_AND_STARTTIME_USED: <span class="number">2605</span>, <span class="comment">// 数据库中用户id和起飞时间已占用</span></span><br><span class="line">  ORG_DATA_ERROR: <span class="number">2606</span>, <span class="comment">// 数据库中oid上级递进查询出现问题，例子：出现子组织a的父组织b的父组织，又是a</span></span><br><span class="line">  ENDTIME_EARLIER_THAN_STARTTIME: <span class="number">2607</span>, <span class="comment">// 传递参数中，结束时间比开始时间要早，错误</span></span><br><span class="line">  TIME_SHOULD_IN_HOUR: <span class="number">2608</span>, <span class="comment">// 只能查一个小时之内的直播数据</span></span><br><span class="line">  USER_NOT_OWN_APP_KEY: <span class="number">2700</span>, <span class="comment">// 用户无权处理此app版本</span></span><br><span class="line">  WRONG_INPUT_PARAMS: <span class="number">2701</span>, <span class="comment">// 用户输入参数有误</span></span><br><span class="line">  ALREADY_VERIFIED_CAN_NOT_EDITED: <span class="number">2702</span>, <span class="comment">// 已经验证完毕，不能再次编辑</span></span><br><span class="line">  TARGET_NOT_EXISTED: <span class="number">2703</span>, <span class="comment">// 目标app记录不存在</span></span><br><span class="line">  APP_VERSION_DELETED: <span class="number">2704</span>, <span class="comment">// APP版本已被删除</span></span><br><span class="line">  CAN_NOT_FIND_APP_VERSION: <span class="number">2705</span>, <span class="comment">// appkey对应的app找不到可用版本</span></span><br><span class="line">  DATA_ORGANIZATION_WRONG: <span class="number">2706</span>, <span class="comment">// 组织用户数据错误</span></span><br><span class="line">  <span class="comment">// 签名相关</span></span><br><span class="line">  CAN_NOT_FIND_BIND_INFO: <span class="number">2800</span>, <span class="comment">// 找不到目标绑定信息</span></span><br><span class="line">  BIND_INFO_PARSE_ERROR: <span class="number">2801</span>, <span class="comment">// 绑定信息对象解析错误</span></span><br><span class="line">  AUTHORIZE_FAILED: <span class="number">4100</span>, <span class="comment">// 鉴权失败</span></span><br><span class="line">  INVALID_APPKEY: <span class="number">4104</span>, <span class="comment">// 不存在的SecretId</span></span><br><span class="line">  REPLAY_ATTACKS: <span class="number">4500</span> <span class="comment">// 重放攻击</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/node-js/" rel="tag"># node.js</a>
+          
+            <a href="/tags/airx/" rel="tag"># airx</a>
+          
+            <a href="/tags/dev/" rel="tag"># dev</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/posts/2017/willin-azure-iothub-route-nodejs/" rel="next" title="Willin: Azure Node.js IoT Hub路由开发指南">
+                <i class="fa fa-chevron-left"></i> Willin: Azure Node.js IoT Hub路由开发指南
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/posts/2018/willin-osx-nodejs-env/" rel="prev" title="Willin: 使用 OS X 进行高效 JS 前后端开发">
+                Willin: 使用 OS X 进行高效 JS 前后端开发 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/avatar.gif" alt="AirDwing Team">
+          <p class="site-author-name" itemprop="name">AirDwing Team</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+          <div class="feed-link motion-element">
+            <a href="/atom.xml" rel="alternate">
+              <i class="fa fa-rss"></i>
+              RSS
+            </a>
+          </div>
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://willin.wang/" title="Willin" target="_blank">Willin</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.skitisu.com/" title="SkiTisu" target="_blank">SkiTisu</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#接入流程"><span class="nav-number">1.</span> <span class="nav-text">接入流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#开发流程"><span class="nav-number">2.</span> <span class="nav-text">开发流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#公共请求参数"><span class="nav-number">2.1.</span> <span class="nav-text">公共请求参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#公共返回结果"><span class="nav-number">2.1.1.</span> <span class="nav-text">公共返回结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#签名机制"><span class="nav-number">2.2.</span> <span class="nav-text">签名机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#对参数排序"><span class="nav-number">2.2.1.</span> <span class="nav-text">对参数排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拼接请求字符串"><span class="nav-number">2.2.2.</span> <span class="nav-text">拼接请求字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#拼接签名原文字符串"><span class="nav-number">2.2.3.</span> <span class="nav-text">拼接签名原文字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#生成签名串"><span class="nav-number">2.2.4.</span> <span class="nav-text">生成签名串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#签名串编码"><span class="nav-number">2.2.5.</span> <span class="nav-text">签名串编码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#鉴权失败"><span class="nav-number">2.2.6.</span> <span class="nav-text">鉴权失败</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#错误码"><span class="nav-number">2.3.</span> <span class="nav-text">错误码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">AirDwing Team</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
